@@ -8,9 +8,9 @@ INSERT INTO
     )
 VALUES (
 	-- First Name
-	'Daniel',
+	'John',
 	-- Last Name
-    'Krause',
+    'Doe',
     -- Fines ( Can Be Left Empty )
-	0.00
+	2.25
 );
