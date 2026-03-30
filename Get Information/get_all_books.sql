@@ -5,7 +5,7 @@ SELECT
     `author` AS 'Author',
     COALESCE( `description`, 'No  description found.' )  AS 'Description',
 	`isbn` AS 'ISBN',
-    COUNT( `isbn` ) AS 'Copies Available'
+    book_id AS 'Book ID'
 FROM
 	(
 		SELECT
@@ -20,5 +20,4 @@ FROM
 					loans
             )
     ) GetBooks
-GROUP BY
-	`isbn`;
+;

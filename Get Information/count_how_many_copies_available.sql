@@ -1,7 +1,7 @@
 USE `DROP TABLE *`;
 
 SELECT
-	book_id
+	count( books.book_id )
 FROM
 	books
 WHERE
@@ -13,6 +13,4 @@ WHERE
 			loans
     )
     AND
-    books.isbn = '9780547928197'
-LIMIT
-	1;
+    books.isbn = '9780547928227';

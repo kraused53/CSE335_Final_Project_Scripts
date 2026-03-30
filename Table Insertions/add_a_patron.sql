@@ -11,6 +11,6 @@ VALUES (
 	'John',
 	-- Last Name
     'Doe',
-    -- Fines ( Can Be Left Empty )
+    -- Fines ( Can Be 0.00 )
 	2.25
 );

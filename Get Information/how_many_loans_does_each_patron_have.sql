@@ -1,7 +1,7 @@
 USE `DROP TABLE *`;
 
 SELECT
-	concat( patrons.first_name, '  ', patrons.last_name ) AS 'Patron Name',
+	CONCAT( patrons.first_name, '  ', patrons.last_name ) AS 'Patron Name',
     COUNT( loans.loan_id ) AS 'Number of loans'
 FROM
 	patrons

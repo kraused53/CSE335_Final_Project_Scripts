@@ -10,7 +10,7 @@ INSERT INTO
     )
 VALUES (
 	-- Book ID
-	38,
+	30,
 	-- Librarian ID
     1,
     -- Card Number
