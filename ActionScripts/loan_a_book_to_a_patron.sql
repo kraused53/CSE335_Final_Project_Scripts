@@ -22,17 +22,20 @@ SET @date_due = ( DATE_ADD( CURRENT_DATE(), INTERVAL 14 DAY ) );
 
 -- Use gathered data to add loan
 INSERT INTO `DROP TABLE *`.loans (
-	book_id,
-    librarian_id,
-    card_number,
-    checkout_date,
-    due_date
+	book_id,				-- The id of the book to loan
+    librarian_id,			-- The id of the librarian who loaned the book
+    card_number,			-- The card number of the patron loaning the book
+    checkout_date,			-- The date the book was checked out
+    due_date				-- The date the book will be due
 ) SELECT
-	@next_available_copy,
-    @get_rand_librarian_id,
-    @card_number_for_loan,
-    @date_today,
-    @date_due
+	@next_available_copy,	-- The next available copy of the given ISBN
+    @get_rand_librarian_id,	-- A randomized librarian ID
+    @card_number_for_loan,	-- The card number of the patron loaning the book 
+    @date_today,			-- The date the book was checked out
+    @date_due				-- The date the book will be due
+-- The below causes the the above to run IF AND ONLY IF the following conditions are met:
+--		1] There is a valid ( non -1 ) value for next_available_copy
+--		2] The user currently has 0 books loaned with a matching ISBN
 FROM DUAL
 WHERE
 	@next_available_copy != -1
