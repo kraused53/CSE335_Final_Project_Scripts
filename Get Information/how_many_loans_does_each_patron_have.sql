@@ -10,4 +10,7 @@ LEFT JOIN
 ON
 	patrons.card_number = loans.card_number
 GROUP BY
-	patrons.card_number;
+	patrons.card_number
+ORDER BY
+	COUNT( loans.loan_id )
+    DESC;

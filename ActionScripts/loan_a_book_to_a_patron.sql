@@ -1,14 +1,41 @@
 -- Define the isbn for the book you want to loan
-SET @isbn_for_loan = '9781546171423';
+SET @isbn_for_loan = '9780307281746';
 
 -- Define the user who is loaning the book
-SET @card_number_for_loan = 1;
+SET @card_number_for_loan = 50;
 
 -- GET a random librarian ID
-SET @get_rand_librarian_id = ( SELECT librarian_id FROM `DROP TABLE *`.librarians ORDER BY  RAND() LIMIT  1 );
+SET @get_rand_librarian_id = ( 
+	SELECT librarian_id 
+	FROM `DROP TABLE *`.librarians 
+	ORDER BY RAND() 
+	LIMIT  1
+);
 
 -- Get next available copy of given isbn. Set to -1 if no book is found
-SET @next_available_copy = ( SELECT books.book_id FROM `DROP TABLE *`.books WHERE books.book_id = ( SELECT book_id FROM `DROP TABLE *`.books WHERE books.book_id NOT IN ( SELECT loans.book_id FROM `DROP TABLE *`.loans ) AND books.isbn = @isbn_for_loan LIMIT 1 ) );
+-- The inner most query fetches all current loans
+-- The middle query makes a list of books who's isbns matach the one set 
+--     above and who's book_id do NOT appear in the list of laons.
+--     This leaves us with a list of all the currently available copies of the requested isbn
+-- The outermost query takes this list and limits it to a single output.
+-- The output of this nested query is the id of the next available book with a matching isbn
+SET @next_available_copy = ( 
+	SELECT books.book_id
+	FROM `DROP TABLE *`.books
+	WHERE books.book_id = (
+		SELECT book_id 		
+		FROM `DROP TABLE *`.books 
+		WHERE books.book_id 
+		NOT IN ( 
+			SELECT loans.book_id 
+			FROM `DROP TABLE *`.loans 
+		) 
+		AND 
+		books.isbn = @isbn_for_loan 
+		LIMIT 1 					-- Limit the outer query to 1 result
+	) 
+);
+
 SET @next_available_copy = if ( @next_available_copy IS NULL, -1, @next_available_copy );
 
 -- See if the given user already has a copy of the given isbn

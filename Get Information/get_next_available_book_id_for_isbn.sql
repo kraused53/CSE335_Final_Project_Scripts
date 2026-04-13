@@ -1,18 +1,27 @@
-USE `DROP TABLE *`;
+SET @patron_card_number = 1;
+SET @book_isbn = '9780547928197';
 
 SELECT
-	book_id
+	COUNT( books.book_id ) AS outcome,
+    books.book_id
 FROM
-	books
+	`DROP TABLE *`.books
 WHERE
-	books.book_id
-    NOT IN (
+	books.book_id = (
 		SELECT
-			loans.book_id
+			book_id
 		FROM
-			loans
-    )
-    AND
-    books.isbn = '9780547928197'
-LIMIT
-	1;
+			`DROP TABLE *`.books
+		WHERE
+			books.book_id
+			NOT IN (
+				SELECT
+					loans.book_id
+				FROM
+					`DROP TABLE *`.loans
+			)
+			AND
+			books.isbn = @book_isbn
+		LIMIT
+			1
+);

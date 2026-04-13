@@ -1,0 +1,6 @@
+SELECT
+	*
+FROM
+	`DROP TABLE *`.librarians
+ORDER BY RAND()
+LIMIT 1;

@@ -1,3 +1,5 @@
+SET @patron_card_number = 3;
+
 SELECT
 	*
 FROM
@@ -14,5 +16,5 @@ FROM
 		ON
 			loans.book_id = books.book_id
 		WHERE
-			loans.card_number = 1
+			loans.card_number = @patron_card_number
     ) GetLoans
