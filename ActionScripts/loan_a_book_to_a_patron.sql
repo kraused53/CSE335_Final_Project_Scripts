@@ -39,7 +39,21 @@ SET @next_available_copy = (
 SET @next_available_copy = if ( @next_available_copy IS NULL, -1, @next_available_copy );
 
 -- See if the given user already has a copy of the given isbn
-SET @user_book_search = ( SELECT COUNT( * ) FROM `DROP TABLE *`.loans WHERE loans.book_id IN ( SELECT books.book_id FROM `DROP TABLE *`.books WHERE books.isbn = @isbn_for_loan ) AND loans.card_number = @card_number_for_loan );
+SET @user_book_search = ( 
+	SELECT COUNT( * ) 
+    FROM `DROP TABLE *`.loans 
+    -- Build a table that contains a list of loans, only if:
+    --   1] The loan's book_id matches one of the ids associated with the given ISBN
+    WHERE loans.book_id IN ( 
+		-- Get a list of all of the book IDs associated with the given isbn
+		SELECT books.book_id 
+        FROM `DROP TABLE *`.books 
+        WHERE books.isbn = @isbn_for_loan 
+	) 
+    AND 
+    --   2] The laons belong to the given patron
+    loans.card_number = @card_number_for_loan
+);
 
 -- Get current date
 SET @date_today = ( CURRENT_DATE() );
@@ -61,8 +75,8 @@ INSERT INTO `DROP TABLE *`.loans (
     @date_today,			-- The date the book was checked out
     @date_due				-- The date the book will be due
 -- The below causes the the above to run IF AND ONLY IF the following conditions are met:
---		1] There is a valid ( non -1 ) value for next_available_copy
---		2] The user currently has 0 books loaned with a matching ISBN
+--   1] There is a valid ( non -1 ) value for next_available_copy
+--   2] The user currently has 0 books loaned with a matching ISBN
 FROM DUAL
 WHERE
 	@next_available_copy != -1
